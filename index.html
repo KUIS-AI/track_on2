@@ -1,0 +1,338 @@
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./resources/style.css" media="screen"/>
+
+<html lang="en">
+<head>
+	<title>Track-On2: Enhancing Online Point Tracking with Memory</title>
+	<meta property="og:image" content="Path to my teaser.jpg"/>
+	<meta property="og:title" content="Track-On2" />
+	<meta property="og:description" content="Track-On2" />
+    <meta property="twitter:card"          content="Track-On2" />
+    <meta property="twitter:title"         content="Track-On2" />
+    <meta property="twitter:description"   content="Track-On2" />
+    <meta property="twitter:image"         content="Path to my teaser.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Add your Google Analytics tag here -->
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-97476543-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-97476543-1');
+    </script>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="title">
+      <b>Track-On2:</b> <br>
+      <b>Enhancing Online Point Tracking with Memory</b> <br>
+    </div>
+
+
+    <br><br>
+    <div class="author">
+        <a href="https://gorkaydemir.github.io" target="_blank">Gorkay Aydemir</a><sup>1</sup>
+    </div>
+    <div class="author">
+        <a href="https://weidixie.github.io" target="_blank">Weidi Xie</a><sup>3</sup>
+    </div>
+    <div class="author">
+        <a href="https://mysite.ku.edu.tr/fguney/" target="_blank">Fatma Guney</a><sup>1, 2</sup>
+    </div>
+
+    <br><br>
+    <div class="affiliation"><sup>1&nbsp;</sup><a href="https://cs.ku.edu.tr" target="_blank">Department of Computer Engineering, Koc University</a></div>
+    <div class="affiliation"><sup>2&nbsp;</sup><a href="https://ai.ku.edu.tr" target="_blank">KUIS AI Center</a></div>
+    <div class="affiliation"><sup>3&nbsp;</sup><a href="https://en.sjtu.edu.cn" target="_blank">School of Artificial Intelligence, Shanghai Jiao Tong University</a></div>
+
+    
+    <br><br>
+
+    <div class="links">Paper <a href="https://arxiv.org/abs/TODO" target="_blank"> [arXiv]</a></div>
+    <div class="links">Code <a href="https://github.com/gorkaydemir/track_on" target="_blank"> [GitHub]</a></div>
+    <div class="links">Cite <a href="./resources/bibtex.txt" target="_blank"> [BibTeX]</a></div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- Teaser video (place this right before the TL;DR box) -->
+    <div class="video-container" aria-label="Track-On2 teaser">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        preload="metadata"
+        poster="./resources/teaser_poster.jpg"
+      >
+        <source src="./resources/teaser.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+  <div class="box">
+    <b><font color="red">TL;DR</font></b> We present <b>Track-On2</b>, a streamlined <b>memory-augmented transformer</b> for <b>online long-term point tracking</b>. It tracks points <b>frame-by-frame</b> with no future frames, eliminating window/full-video processing, and achieves <b>high FPS</b> with a <b>low GPU-memory</b> footprint.
+  </div>
+
+    <br>
+
+    <br><br>
+    <hr>
+    <br><br>
+
+
+    <h1>Method Overview</h1>
+    <img style="width: 80%;" src="./resources/method_overview.png"
+         alt="Method overview figure"/>
+    <br><br>
+    <p style="width: 80%;">
+      We introduce <strong>Track-On2</strong>, a simple transformer-based method for
+    <strong>online, frame-by-frame point tracking</strong>. The pipeline has three parts: <br>
+    (i) <strong>Visual Encoder</strong> <span class="tag tag-green">bottom-left</span>,
+    which extracts multi-scale features from each frame with a DINOv3-based ViT-Adapter and
+    fuses them via an FPN; <br>
+    (ii) <strong>Query Decoder</strong>, which decodes interest-point
+    queries by attending to current-frame features and the memory propagated from the previous
+    frame; <br>
+    (iii) <strong>Point Prediction</strong> <span class="tag tag-blue">right</span>,
+    which estimates correspondences in a coarse-to-fine manner; first by patch classification
+    from feature similarity, then by offset regression from the top patch candidates. Before
+    selecting the top patches, we re-rank candidates by enriching each query with local
+    information from the top-<em>k</em> patches. After re-ranking, the refined queries are written
+    to memory for the next frame.
+      
+    </p>
+
+    <br><br>
+    <hr>
+    <br><br>
+
+    <h1>Quantitative Results</h1>
+    <p style="width: 80%;">
+      We report &delta;<sub>avg</sub> for BootsTAPNext-B, CoTracker3 (Video), and Track-On2 (higher is better).
+      Track-On2 achieves the best &delta;<sub>avg</sub>; on four of five datasets (DAVIS, RoboTAP, Dynamic Replica, and PointOdyssey),
+      and is competitive on Kinetics. This evidences robustness across domains
+      (internet videos, robotics, synthetic scenes) and time scales, from short clips to very long sequences,
+      while operating fully online without future frames.
+      <br><br>
+    <table class="results-table">
+
+      <colgroup>
+        <col style="width:34%">
+        <col style="width:11%">
+        <col style="width:11%">
+        <col style="width:11%">
+        <col style="width:17%">
+        <col style="width:16%">
+      </colgroup>
+
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>DAVIS</th>
+          <th>Kinetics</th>
+          <th>RoboTAP</th>
+          <th>Dynamic<br>Replica</th>
+          <th>Point&nbsp;Odyssey</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>BootsTAPNext</td>
+          <td> <u>78.5</u> </td>
+          <td> <b>70.6</b> </td>
+          <td>75.0</td>
+          <td>46.2</td>
+          <td>9.9</td>
+        </tr>
+        <tr>
+          <td>CoTracker3</td>
+          <td>76.9</td>
+          <td>67.8</td>
+          <td> <u>78.0</u> </td>
+          <td> <u>72.3</u> </td>
+          <td> <u>44.5</u> </td>
+        </tr>
+        <tr>
+          <td>Track-On2</td>
+          <td> <b>79.9</b> </td> 
+          <td> <u>69.3</u> </td> 
+          <td> <b>80.5</b> </td>
+          <td> <b>74.5</b> </td>
+          <td> <b>45.1</b> </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br><br>
+    <hr>
+    <br><br>
+
+
+    <h1>Efficiency</h1>
+    <img style="width: 50%;" src="./resources/efficiency.png"  alt="Efficiency plot figure"/>
+    <br><br>
+
+    <p style="width: 80%; text-align: left;">
+      Inference efficiency vs. memory length (<em>L</em><sub>i</sub>) when tracking <em>N</em> points: with our default <em>L</em><sub>i</sub>=72, Track-On2 tracks 256 points at &gt;30&nbsp;FPS using 0.79&nbsp;GB; real-time capable.
+    </p>
+
+    <br><br>
+    <hr>
+    <br><br>
+    
+    <h1>Qualitative Results</h1>
+
+    Here, we provide qualitative results on three datasets: DAVIS, Kinetics, and RoboTAP.
+
+    <div class="container is-max-desktop">
+    <div class="video-grid">
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_0.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_1.mp4" type="video/mp4">
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_2.mp4" type="video/mp4">
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="video-grid">
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_3.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_4.mp4" type="video/mp4">
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/davis_5.mp4" type="video/mp4">
+        </video>
+        <figcaption>DAVIS</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="video-grid">
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/kinetics_0.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>Kinetics</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/kinetics_1.mp4" type="video/mp4">
+        </video>
+        <figcaption>Kinetics</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/kinetics_2.mp4" type="video/mp4">
+        </video>
+        <figcaption>Kinetics</figcaption>
+      </figure>
+    </div>
+  </div>
+
+
+  <div class="container is-max-desktop">
+    <div class="video-grid">
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/robotap_0.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>RoboTAP</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/robotap_1.mp4" type="video/mp4">
+        </video>
+        <figcaption>RoboTAP</figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="./resources/query_tracks/robotap_2.mp4" type="video/mp4">
+        </video>
+        <figcaption>RoboTAP</figcaption>
+      </figure>
+    </div>
+  </div>
+  
+
+
+  
+
+
+
+
+
+
+    <!-- <h1>Paper</h1>
+
+    <div class="paper-info"style="width: 80%;">
+        <h3>Track-On2: ...</h3>
+        <p>Gorkay Aydemir, Weidi Xie and Fatma Guney</p>
+
+        <p>ICLR 2025</p>
+        <pre><code>@InProceedings{Aydemir2025ICLR,
+          author = {Aydemir, G\"orkay and Xie, Weidi and G\"uney, Fatma},
+          title = {{Track-On2}: Enhancing Online Point Tracking with Memory},
+          year      = {2025}}
+                </code></pre>
+    </div>
+
+    <br><br> -->
+
+</div>
+
+</body>
+
+</html>
