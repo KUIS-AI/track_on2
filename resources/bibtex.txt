@@ -1,2 +1,6 @@
-@InProceedings{Aydemir2025...,
-    TODO}
+@article{Aydemir2025TrackOn2,
+  title={{Track-On2}: Enhancing Online Point Tracking with Memory},
+  author={Aydemir, G\"orkay and Xie, Weidi and G\"uney, Fatma},
+  journal={arXiv preprint arXiv:2509.19115},
+  year={2025}
+}
